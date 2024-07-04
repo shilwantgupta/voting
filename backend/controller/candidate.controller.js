@@ -24,13 +24,20 @@ export const getCandidates = async (req, res) => {
     if (voted) {
       return res.status(200).json({
         message: "You already voted",
+        success: false,
       });
     }
-    const candidates = await Candidate.find();
+    let candidates;
+    if (user.role === "user") {
+      candidates = await Candidate.find({ status: 1 }).select("-count");
+    } else {
+      candidates = await Candidate.find({ status: 1 });
+    }
     if (candidates) {
       return res.status(200).json({
         message: "Candidates",
         data: candidates,
+        success: true,
       });
     }
     return res.status(400).json({ message: "Something went wrong" });

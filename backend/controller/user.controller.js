@@ -50,6 +50,7 @@ export const login = async (req, res) => {
           id: existingUser._id,
           email: existingUser.email,
           username: existingUser.username,
+          role:existingUser.role
         },
         "mysecretkey",
         { expiresIn: "1h" }

@@ -10,6 +10,7 @@ export const doVote = async (req, res) => {
     if (existingUser.isVoted) {
       return res.status(200).json({
         message: "You already voted",
+        success:false
       });
     }
     const vote = await Vote.create({ candidate: candidateid, user: userid });
@@ -23,7 +24,8 @@ export const doVote = async (req, res) => {
       );
 
       return res.status(200).json({
-        message: "Voted Successfully",
+        message: "Thanks for voting!",
+        success:true
       });
     }
     return res.status(400).json({ message: "Something went wrong" });
@@ -34,7 +36,7 @@ export const doVote = async (req, res) => {
 
 export const votes = async (req, res) => {
   try {
-    const votes = await Vote.find();
+    const votes = await Vote.find().populate("candidate").populate("user");
     if (votes) {
       return res.status(200).json({
         data: votes,
